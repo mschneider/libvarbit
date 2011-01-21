@@ -1,4 +1,4 @@
-#include "../src/bitvector.cpp"
+#include "bitvector.h"
 
 #define printTimeDiff(str, a, b) \
     timeval a; \

@@ -1,3 +1,6 @@
+#ifndef LIBVARBIT_BITVECTOR_H_
+#define LIBVARBIT_BITVECTOR_H_
+
 #include <vector>
 #include <iostream>
 #include <cstdlib>
@@ -156,3 +159,5 @@ public:
         return (this->current_block != other.current_block) || (this->current_segment != other.current_segment);
     };
 };
+
+#endif // LIBVARBIT_BITVECTOR_H_
