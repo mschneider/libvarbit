@@ -2,8 +2,14 @@
 Data structures storing data with variable bit length.
 
 ## Dependencies
-CMake (2.8)
-googletest (1.5)
+[CMake](http://www.cmake.org) (2.8)
+[FAQ](http://www.cmake.org/Wiki/CMake_FAQ)
+[DOC](http://www.cmake.org/cmake/help/cmake-2-8-docs.html)
+
+[googletest](http://code.google.com/p/googletest) (1.5)
+[FAQ](http://code.google.com/p/googletest/wiki/FAQ)
+[DOC1](http://code.google.com/p/googletest/wiki/Primer)
+[DOC2](http://code.google.com/p/googletest/wiki/AdvancedGuide)
 
 ## Build
 To build the benchmarks and tests simply execute:
