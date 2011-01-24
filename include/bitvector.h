@@ -6,8 +6,14 @@
 #include <cstdlib>
 #include <cassert>
 #include <stdint.h>
+#ifdef _WIN32
+#include <winsock.h>
+#include <sys/timeb.h>
+#include <sys/types.h>
+#else
 #include <sys/time.h>
 #include <sys/mman.h>
+#endif
 
 template<typename _block_type>    
 class block_caching_iterator;
