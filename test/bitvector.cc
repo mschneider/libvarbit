@@ -28,3 +28,35 @@ TEST(bitvector, CreationSucceedsForValidBitWidths) {
   vector64 = new bitvector<uint64_t>(32);
   vector64 = new bitvector<uint64_t>(64);
 }
+
+TEST(bitvector, StoresValuesWithPushBack) {
+  uint64_t values[24] = {1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4};
+  bitvector<uint64_t> vector(4);
+  for(int i = 0; i<24; ++i) {
+    vector.push_back(values[i]);
+  }
+  for(int i = 0; i<24; ++i) {
+    EXPECT_EQ(vector[i], values[i]);
+  }
+}
+
+TEST(bitvector, SizeIncreasesWithPushBack) {
+  uint64_t values[24] = {1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4};
+  bitvector<uint64_t> vector(4);
+  for(int i = 0; i<24; ++i) {
+    EXPECT_EQ(vector.size(), i);
+    vector.push_back(values[i]);
+    EXPECT_EQ(vector.size(), i+1);    
+  }
+}
+
+TEST(bitvector, OnlyLeastSignificantBitsAreStored) {
+  uint64_t values[24] = {1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4};
+  bitvector<uint64_t> vector(2);
+  for(int i = 0; i<24; ++i) {
+    vector.push_back(values[i]);
+  }
+  for(int i = 0; i<24; ++i) {
+    EXPECT_EQ(vector[i], values[i] & 3);
+  }
+}
