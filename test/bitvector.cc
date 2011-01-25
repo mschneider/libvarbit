@@ -13,20 +13,34 @@ TEST(bitvector, CreationFailsForLargeBitWidths) {
 }
 
 TEST(bitvector, CreationSucceedsForValidBitWidths) {
-  bitvector<uint8_t> *vector8 = new bitvector<uint8_t>(1); 
+  bitvector<uint8_t> *vector8 = new bitvector<uint8_t>(1);
+  EXPECT_EQ(vector8->size(), 0);
   vector8 = new bitvector<uint8_t>(8); 
+  EXPECT_EQ(vector8->size(), 0);
   bitvector<uint16_t> *vector16 = new bitvector<uint16_t>(1);
+  EXPECT_EQ(vector16->size(), 0);
   vector16 = new bitvector<uint16_t>(8);
+  EXPECT_EQ(vector16->size(), 0);
   vector16 = new bitvector<uint16_t>(16);
+  EXPECT_EQ(vector16->size(), 0);
   bitvector<uint32_t> *vector32 = new bitvector<uint32_t>(1);
+  EXPECT_EQ(vector32->size(), 0);
   vector32 = new bitvector<uint32_t>(8);
+  EXPECT_EQ(vector32->size(), 0);
   vector32 = new bitvector<uint32_t>(16);
+  EXPECT_EQ(vector32->size(), 0);
   vector32 = new bitvector<uint32_t>(32);
+  EXPECT_EQ(vector32->size(), 0);
   bitvector<uint64_t> *vector64 = new bitvector<uint64_t>(1);
+  EXPECT_EQ(vector64->size(), 0);
   vector64 = new bitvector<uint64_t>(8);
+  EXPECT_EQ(vector64->size(), 0);
   vector64 = new bitvector<uint64_t>(16);
+  EXPECT_EQ(vector64->size(), 0);
   vector64 = new bitvector<uint64_t>(32);
+  EXPECT_EQ(vector64->size(), 0);
   vector64 = new bitvector<uint64_t>(64);
+  EXPECT_EQ(vector64->size(), 0);
 }
 
 TEST(bitvector, StoresValuesWithPushBack) {
