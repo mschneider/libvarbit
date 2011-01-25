@@ -13,7 +13,7 @@ template<typename Input, typename Result>
 class Benchmark {
  public:
   Benchmark(Result(*function)(Input)) : function_(function) { }
-  Result run(Input input);
+  Result run(String label, Input input);
   static void initialize(int argc, char **argv);
  private:
   Result(*function_)(Input);
@@ -28,6 +28,7 @@ void Benchmark::initialize(int, char **) {
 
 Result Benchmark::run(Input input) {
   Result result = _function(input);
+  std::cout<<"Benchmarked: "<<label<<std::endl;
   return result;
 }
 #endif  // LIBVARBIT_BENCHMARK_H_
