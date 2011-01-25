@@ -31,7 +31,7 @@ TEST(bitvector, CreationSucceedsForValidBitWidths) {
 
 TEST(bitvector, StoresValuesWithPushBack) {
   uint64_t values[24] = {1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4};
-  bitvector<uint64_t> vector(4);
+  bitvector<uint64_t> vector(7);
   for(int i = 0; i<24; ++i) {
     vector.push_back(values[i]);
   }
@@ -42,7 +42,7 @@ TEST(bitvector, StoresValuesWithPushBack) {
 
 TEST(bitvector, SizeIncreasesWithPushBack) {
   uint64_t values[24] = {1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4};
-  bitvector<uint64_t> vector(4);
+  bitvector<uint64_t> vector(7);
   for(int i = 0; i<24; ++i) {
     EXPECT_EQ(vector.size(), i);
     vector.push_back(values[i]);
@@ -58,5 +58,20 @@ TEST(bitvector, OnlyLeastSignificantBitsAreStored) {
   }
   for(int i = 0; i<24; ++i) {
     EXPECT_EQ(vector[i], values[i] & 3);
+  }
+}
+
+TEST(bitvector, UpdatesValuesWithSet) {
+  uint64_t old_values[24] = {1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4};
+  bitvector<uint64_t> vector(7);
+  for(int i = 0; i<24; ++i) {
+    vector.push_back(old_values[i]);
+  }
+  uint64_t new_values[24] = {4,3,2,1,0,9,8,7,6,5,4,3,2,1,0,9,8,7,6,5,4,3,2,1};
+  for(int i = 0; i<24; ++i) {
+    vector.set(i, new_values[i]);
+  }
+  for(int i = 0; i<24; ++i) {
+    EXPECT_EQ(vector[i], new_values[i]);
   }
 }
