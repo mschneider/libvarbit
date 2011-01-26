@@ -12,7 +12,7 @@
 class Configuration {
  public:
   Configuration(int argc, char **argv);
-  const uint64_t num_elements() { return num_elements_; };
+  const uint64_t num_elements() { return num_elements_; }
  private:
   uint64_t num_elements_;
 };
@@ -48,7 +48,7 @@ Result Benchmark<Input, Result>::run(Input input, const char* label) {
   gettimeofday(&t_start, NULL);
   Result result = function_(input);
   gettimeofday(&t_end, NULL);
-  std::cout << label << ": " << t_end.tv_sec-t_start.tv_sec + 
+  std::cout << label << ": " << t_end.tv_sec-t_start.tv_sec +
                                 (t_end.tv_usec-t_start.tv_usec)/1000000.0
                              << std::endl;
   return result;
