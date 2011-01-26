@@ -1,4 +1,8 @@
+#define USE_PAPI
+#define USE_COLORS
+
 #include "bitvector.h"
+#include "benchmark_helper.h"
 #include <vector>
 
 #ifdef _WIN32
@@ -7,19 +11,13 @@ void gettimeofday(struct timeval* t, void* timezone)
         _ftime(&timebuffer);
         t->tv_sec = timebuffer.time;
         t->tv_usec = 1000 * timebuffer.millitm;
-}
+};
 #endif
-
-#define printTimeDiff(str, a, b) \
-    timeval a; \
-    gettimeofday(&a, NULL); \
-    std::cout << str << " ran " << a.tv_sec - b.tv_sec + (a.tv_usec - b.tv_usec) / 1000000.0 << " seconds." << std::endl; \
-    gettimeofday(&a, NULL);
 
 typedef uint8_t block_type;
 typedef bitvector<block_type> bcv_t;
 typedef block_type uncompressed_type;
-const bcv_t::bit_count_t max_bit_width = sizeof(block_type)*8;
+const bcv_t::bit_count_t max_bit_width = sizeof(block_type) * 8;
 const bcv_t::size_t num_elements = 512ul * 1024 * 1024 / sizeof(block_type);
 
 void insert_elementwise(bcv_t& v)
@@ -91,8 +89,16 @@ int main(int, char**)
         exit(1);
     }
 	#endif
+	
+    #ifdef USE_PAPI
+	    int benchmarkEvents [] = {PAPI_TOT_CYC, PAPI_TOT_INS};
+	    int numEvents = 2;
+	    BenchmarkHelper benchmark = BenchmarkHelper(benchmarkEvents, numEvents);
+	#else
+	    BenchmarkHelper benchmark = BenchmarkHelper();
+	#endif
+	
     std::cout << "Maximum Memory usage: " << (num_elements * sizeof(block_type)) / (1024 * 1024) << "MB" << std::endl;
-    
     std::cout << "sizeof(bitvector::size_t):  " << sizeof(bcv_t::size_t) << std::endl;
     std::cout << "sizeof(bitvector::block_t): " << sizeof(bcv_t::block_t) << std::endl;
     std::cout << "sizeof(bitvector::value_t): " << sizeof(bcv_t::value_t) << std::endl << std::endl;
@@ -101,32 +107,31 @@ int main(int, char**)
     gettimeofday(&t_start, NULL);
     for(bcv_t::bit_count_t bit_width = 1; bit_width <= max_bit_width; ++bit_width) {
         bcv_t v(bit_width, num_elements);
-        printTimeDiff("init", t_init, t_start);
+        benchmark.printBenchmark("init");
         
         insert_elementwise(v);
-        printTimeDiff("set", t_set, t_init);
+        benchmark.printBenchmark("set");
         
         v.inspect();
 
 		std::vector<uncompressed_type> vec(num_elements);  
 		fill_uncompressedVector(vec, bit_width);
 
-        gettimeofday(&t_set, NULL);
+        benchmark.resetBenchmark();
         
         bcv_t::size_t result_loop = sum_loop(v);
-        printTimeDiff("loop", t_read, t_set);
+        benchmark.printBenchmark("loop");
         
         bcv_t::size_t result_iter = sum_iter(v);
-        printTimeDiff("iter", t_iter, t_read);
+        benchmark.printBenchmark("iter");
 
 		bcv_t::size_t result_uncompressed = sum_uncompressed(vec);
-        printTimeDiff("uncompressed", t_uncompressed, t_iter);
+        benchmark.printBenchmark("uncompressed");
         
         std::cout << "sum of loop was:         " << result_loop << std::endl;
         std::cout << "sum of iter was:         " << result_iter << std::endl;
 		std::cout << "sum of uncompressed was: " << result_uncompressed << std::endl;
         std::cout << "should be:               " << check_sum(bit_width) << std::endl << std::endl << std::endl;
-        gettimeofday(&t_start, NULL);
-		
+        benchmark.resetBenchmark();
     }
 }
