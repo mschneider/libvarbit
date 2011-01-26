@@ -2,18 +2,18 @@
 #include <vector>
 
 #ifdef _WIN32
-void gettimeofday(struct timeval* t,void* timezone)
+void gettimeofday(struct timeval* t, void* timezone)
 {       struct _timeb timebuffer;
-        _ftime( &timebuffer );
-        t->tv_sec=timebuffer.time;
-        t->tv_usec=1000*timebuffer.millitm;
+        _ftime(&timebuffer);
+        t->tv_sec = timebuffer.time;
+        t->tv_usec = 1000 * timebuffer.millitm;
 }
 #endif
 
 #define printTimeDiff(str, a, b) \
     timeval a; \
     gettimeofday(&a, NULL); \
-    std::cout<<str<<" ran "<<a.tv_sec-b.tv_sec+(a.tv_usec-b.tv_usec)/1000000.0<<" seconds."<<std::endl; \
+    std::cout << str << " ran " << a.tv_sec - b.tv_sec + (a.tv_usec - b.tv_usec) / 1000000.0 << " seconds." << std::endl; \
     gettimeofday(&a, NULL);
 
 typedef uint8_t block_type;
@@ -43,7 +43,7 @@ void fill_uncompressedVector(std::vector<uncompressed_type>& vec, bcv_t::bit_cou
 	bcv_t::block_t bitmask = ~(~0 << bit_width);
 	vec.resize(num_elements);
     for(bcv_t::size_t i = 0; i < num_elements; ++i) {
-        vec[i]=(i & bitmask);
+        vec[i] = (i & bitmask);
     }
 };
 
@@ -77,8 +77,9 @@ bcv_t::size_t check_sum(bcv_t::bit_count_t bit_width)
 {
     bcv_t::size_t result = 0;
     bcv_t::block_t bitmask = ~(~0 << bit_width);
-    for(bcv_t::size_t i = 0; i < num_elements; ++i)
+    for(bcv_t::size_t i = 0; i < num_elements; ++i) {
         result += (i & bitmask);
+    }
     return result;
 };
 
@@ -90,11 +91,11 @@ int main(int, char**)
         exit(1);
     }
 	#endif
-    std::cout<<"Maximum Memory usage: "<<(num_elements * sizeof(block_type)) / (1024 * 1024)<<"MB"<<std::endl;
+    std::cout << "Maximum Memory usage: " << (num_elements * sizeof(block_type)) / (1024 * 1024) << "MB" << std::endl;
     
-    std::cout<<"sizeof(bitvector::size_t):  "<<sizeof(bcv_t::size_t) <<std::endl;
-    std::cout<<"sizeof(bitvector::block_t): "<<sizeof(bcv_t::block_t)<<std::endl;
-    std::cout<<"sizeof(bitvector::value_t): "<<sizeof(bcv_t::value_t)<<std::endl<<std::endl;
+    std::cout << "sizeof(bitvector::size_t):  " << sizeof(bcv_t::size_t) << std::endl;
+    std::cout << "sizeof(bitvector::block_t): " << sizeof(bcv_t::block_t) << std::endl;
+    std::cout << "sizeof(bitvector::value_t): " << sizeof(bcv_t::value_t) << std::endl << std::endl;
     
     timeval t_start;
     gettimeofday(&t_start, NULL);
@@ -121,10 +122,10 @@ int main(int, char**)
 		bcv_t::size_t result_uncompressed = sum_uncompressed(vec);
         printTimeDiff("uncompressed", t_uncompressed, t_iter);
         
-        std::cout<<"sum of loop was: "<<result_loop<<std::endl;
-        std::cout<<"sum of iter was: "<<result_iter<<std::endl;
-		std::cout<<"sum of uncompressed was: "<<result_uncompressed<<std::endl;
-        std::cout<<"should be:       "<<check_sum(bit_width)<<std::endl<<std::endl<<std::endl;
+        std::cout << "sum of loop was:         " << result_loop << std::endl;
+        std::cout << "sum of iter was:         " << result_iter << std::endl;
+		std::cout << "sum of uncompressed was: " << result_uncompressed << std::endl;
+        std::cout << "should be:               " << check_sum(bit_width) << std::endl << std::endl << std::endl;
         gettimeofday(&t_start, NULL);
 		
     }
