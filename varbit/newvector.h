@@ -1,5 +1,7 @@
 #ifndef VARBIT_VECTOR_H_
 #define VARBIT_VECTOR_H_
+#include <varbit/reference.h>
+
 #include <stdint.h>
 
 #include <vector>
@@ -46,22 +48,11 @@ class vector {
     ++size_;
   }
 
-  // has to be const - use Set instead
-  // setting values via [] without bitmask could corrupt the memory
-  const value_type operator[](const size_type n) const {
-      const block_type &block = Block(n);
+  reference<block_type> operator[](const size_type n) {
+      block_type &block = Block(n);
       const bit_size_type offset_in_block = OffsetInBlock(n);
-      return ((block >> offset_in_block) & bitmask_);
-  };
-
-  void Set(const size_type n, const value_type value) {
-    block_type &block = Block(n);
-    const bit_size_type offset_in_block = OffsetInBlock(n);
-    // TODO(mrks): Test performance impact of bitmask caching.
-    const block_type shifted_bitmask = bitmask_ << offset_in_block;
-    const block_type shifted_segment = value << offset_in_block;
-    // http://www-graphics.stanford.edu/~seander/bithacks.html#MaskedMerge
-    block = block ^ ((block ^ shifted_segment) & shifted_bitmask);
+      return reference<block_type>(block, bitmask_ << offset_in_block,
+                                   offset_in_block);
   };
 
   const size_type capacity() const { return capacity_; }
