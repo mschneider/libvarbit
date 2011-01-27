@@ -31,3 +31,10 @@ if(PFUNC_HAVE_PAPI_H)
 else()
 	message("Benchmarks disabled as papi.h was not found.")
 endif()
+
+# style
+add_custom_target(style
+	python tools/cpplint.py
+	--filter=-legal,-readability/streams,-build/header_guard
+	benchmark/* include/* test/*
+	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
