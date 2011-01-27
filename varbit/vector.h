@@ -1,9 +1,10 @@
-#ifndef LIBVARBIT_BITVECTOR_H_
-#define LIBVARBIT_BITVECTOR_H_
+#ifndef VARBIT_VECTOR_H_
+#define VARBIT_VECTOR_H_
+#include <varbit/reference.h>
+
 #include <stdint.h>
 
 #include <vector>
-#include <iostream>
 #include <cstdlib>
 #include <cassert>
 
@@ -90,4 +91,4 @@ class vector {
   vector_type              blocks_;
 };
 };
-#endif  // LIBVARBIT_BITVECTOR_H_
+#endif  // VARBIT_VECTOR_H_

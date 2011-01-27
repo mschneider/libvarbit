@@ -1,5 +1,5 @@
-#ifndef LIBVARBIT_BENCHMARK_H_
-#define LIBVARBIT_BENCHMARK_H_
+#ifndef BENCHMARK_BENCHMARK_H_
+#define BENCHMARK_BENCHMARK_H_
 
 #include <sys/mman.h>
 #include <sys/time.h>  // TODO(mrks): switch to PAPI
@@ -71,4 +71,4 @@ Result Benchmark<Input, Result>::run(const Input& input, const int bit_width) {
             << std::endl;
   return result;
 }
-#endif  // LIBVARBIT_BENCHMARK_H_
+#endif  // BENCHMARK_BENCHMARK_H_

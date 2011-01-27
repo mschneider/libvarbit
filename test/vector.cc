@@ -1,4 +1,4 @@
-#include "include/vector.h"
+#include "varbit/vector.h"
 #include <gtest/gtest.h>
 
 TEST(vector, CreationFailsForLargeBitWidths) {
