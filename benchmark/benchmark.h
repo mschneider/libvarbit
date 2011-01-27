@@ -2,8 +2,11 @@
 #define LIBVARBIT_BENCHMARK_H_
 
 #include <sys/mman.h>
-#include <sys/time.h>  // TODO(mrks): switch to PAPI
+#include <papi.h>
 #include <iostream>
+
+#define PAPI_COUNTERS {PAPI_TOT_CYC, PAPI_TOT_INS}
+#define PAPI_NUM_COUNTERS 2
 
 // Simple Configuration class handling command lines parameters and benchmark
 // global setup. Aways create an instance of this in your main:
@@ -17,12 +20,22 @@ class Configuration {
   uint64_t num_elements_;
 };
 
-Configuration::Configuration(int argc, char **) {
+Configuration::Configuration(int argc, char **argv) {
   if (!mlockall(MCL_CURRENT & MCL_FUTURE)) {
     std::cerr << "mlockall failed: Couldn't lock memory." << std::endl;
     exit(1);
   }
-  num_elements_ = argc * 1024 * 1024;
+  int counters[] = PAPI_COUNTERS;
+  const int status = PAPI_start_counters(counters, PAPI_NUM_COUNTERS);
+  if(status != PAPI_OK) {
+    std::cout << "Can't start PAPI Counters (" << status << ")." << std::endl;
+    exit(1);
+  }
+  if(argc != 2) {
+    std::cout << "Please specify the number of elements as a parameter. Kthxbai." << std::endl;
+    exit(1);
+  }
+  num_elements_ = atoi(argv[1]) * 1024 * 1024;
 }
 
 Configuration Config(int argc = 0, char **argv = NULL) {
@@ -44,7 +57,12 @@ class Benchmark {
   Result(*function_)(const Input&);
   const char* function_name_;
   const char* data_structure_name_;
+  long long *papi_values_;
+  static int papi_counters_[];
 };
+
+template<typename Input, typename Result>
+int Benchmark<Input, Result>::papi_counters_[] = PAPI_COUNTERS;
 
 template<typename Input, typename Result>
 Benchmark<Input, Result>::Benchmark(Result(*function)(const Input&),
@@ -52,23 +70,34 @@ Benchmark<Input, Result>::Benchmark(Result(*function)(const Input&),
                                     const char* function_name)
     : function_(function),
       function_name_(function_name),
-      data_structure_name_(data_structure_name) { }
+      data_structure_name_(data_structure_name),
+      papi_values_(new long long[PAPI_NUM_COUNTERS]) {
+    std::cout << "#function, data structure, bit width";
+    for(unsigned int i = 0; i < PAPI_NUM_COUNTERS; ++i) {
+      char event_name[PAPI_MAX_STR_LEN] = "";
+      PAPI_event_code_to_name(papi_counters_[i], event_name);
+      std::cout << ", " << event_name;
+    }
+    std::cout << std::endl;
+  }
 
 template<typename Input, typename Result>
 Result Benchmark<Input, Result>::run(const Input& input, const int bit_width) {
-  timeval t_start, t_end;
-  gettimeofday(&t_start, NULL);
+  PAPI_read_counters(papi_values_, PAPI_NUM_COUNTERS);
   Result result = function_(input);
-  gettimeofday(&t_end, NULL);
+  PAPI_read_counters(papi_values_, PAPI_NUM_COUNTERS);
+  
   std::cout << function_name_
-            << ','
+            << ", "
             << data_structure_name_
-            << ','
+            << ", "
             << bit_width
-            << ','
-            << t_end.tv_sec - t_start.tv_sec +
-               (t_end.tv_usec - t_start.tv_usec) / 1000000.0
-            << std::endl;
+            << ", ";
+  for(unsigned int i = 0; i < PAPI_NUM_COUNTERS; ++i) {
+    std::cout << papi_values_[i] << (i < PAPI_NUM_COUNTERS - 1 ? ", " : "");
+  }
+  std::cout << std::endl;
+            
   return result;
 }
 #endif  // LIBVARBIT_BENCHMARK_H_
