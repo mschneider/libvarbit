@@ -2,7 +2,7 @@ project(libvarbit)
 cmake_minimum_required (VERSION 2.8)
 
 # settings
-set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -Wformat=2 -Wold-style-cast -Winit-self -Wmissing-include-dirs -Wpointer-arith -Wredundant-decls -Wundef -Wwrite-strings -lpapi -lpthread")
+set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -Wformat=2 -Wold-style-cast -Winit-self -Wmissing-include-dirs -Wpointer-arith -Wredundant-decls -Wundef -Wwrite-strings")
 
 # headers
 install(
@@ -31,7 +31,7 @@ if(PFUNC_HAVE_PAPI_H)
 		target_link_libraries("benchmark_${binary_filename}" "papi")
 	endforeach()
 else()
-	message("Benchmarks disabled as papi.h was not found.")
+	message("-- Benchmarks disabled")
 endif()
 
 # style
