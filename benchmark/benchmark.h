@@ -38,8 +38,8 @@ template <typename Input, typename Result>
 class Benchmark {
  public:
   Benchmark(Result(*function)(const Input&), const char* function_name,
-                                             const char* data_structure_name);
-  Result run(const Input input, const int bit_width);
+            const char* data_structure_name);
+  Result run(const Input& input, const int bit_width);
  private:
   Result(*function_)(const Input&);
   const char* function_name_;
@@ -50,12 +50,12 @@ template<typename Input, typename Result>
 Benchmark<Input, Result>::Benchmark(Result(*function)(const Input&),
                                     const char* data_structure_name,
                                     const char* function_name)
-  : function_(function),
-    function_name_(function_name),
-    data_structure_name_(data_structure_name) { }
+    : function_(function),
+      function_name_(function_name),
+      data_structure_name_(data_structure_name) { }
 
 template<typename Input, typename Result>
-Result Benchmark<Input, Result>::run(const Input input, const int bit_width) {
+Result Benchmark<Input, Result>::run(const Input& input, const int bit_width) {
   timeval t_start, t_end;
   gettimeofday(&t_start, NULL);
   Result result = function_(input);

@@ -29,7 +29,7 @@ class vector {
         bitmask_(~(~0 << segment_width_)),
         capacity_(capacity),
         size_(0) {
-    assert(segment_width_ <= sizeof(block_type) * 8);
+    assert(segment_width_ <= max_bit_width());
     const size_t reserved_blocks = (capacity_ / segments_per_block_) +
                                    (capacity_ % segments_per_block_ > 0);
     blocks_ = vector_type(reserved_blocks, 0);
@@ -67,6 +67,7 @@ class vector {
 
   const size_type capacity() const { return capacity_; }
   const size_type size() const { return size_; }
+  static bit_size_type max_bit_width() { return sizeof(block_type) * 8; }
 
  private:
   // returns the block containing the nth element
