@@ -17,17 +17,17 @@ size_type sum_using_subscript(const vector_type& vector) {
 
 int main(int argc, char** argv) {
   Configuration config = Config(argc, argv);
+  Benchmark<bcv8, bcv8::size_type> benchmark(
+      sum_using_subscript<bcv8, bcv8::size_type>,
+      "bcv8",
+      "sum_using_subscript");
   for (bcv8::bit_size_type bit_width = 1; bit_width <= 8*sizeof(uint8_t);
                                          ++bit_width) {
     bcv8 vector(bit_width, Config().num_elements());
     for (bcv8::size_type i = 0; i < Config().num_elements(); ++i) {
      vector.push_back(i);
     }
-    Benchmark<bcv8, bcv8::size_type> benchmark(
-        sum_using_subscript<bcv8, bcv8::size_type>);
-    bcv8::size_type result = benchmark.run("bcv8:sum_using_subscript",
-                                           bit_width,
-                                           vector);
+    bcv8::size_type result = benchmark.run(vector, bit_width);
     std::cout << "Result: " << result << std::endl;
   }
   return 0;
