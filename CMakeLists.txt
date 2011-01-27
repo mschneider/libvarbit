@@ -9,13 +9,14 @@ install(
 	DIRECTORY include/
 	DESTINATION include/varbit)
 
+
 # tests
 enable_testing(true)
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS} include)
 aux_source_directory(test test_sources)
 add_executable(tests ${test_sources})
-target_link_libraries(tests ${GTEST_BOTH_LIBRARIES})
+target_link_libraries(tests ${GTEST_BOTH_LIBRARIES} pthread)
 GTEST_ADD_TESTS(tests "" ${test_sources})
 
 # benchmarks
@@ -29,6 +30,7 @@ if(PFUNC_HAVE_PAPI_H)
 			binary_filename ${source_filename})
 		add_executable("benchmark_${binary_filename}" ${source_filename})
 	endforeach()
+	target_link_libraries("benchmark_${binary_filename}" "-lpapi -lpthread")
 else()
 	message("Benchmarks disabled as papi.h was not found.")
 endif()
