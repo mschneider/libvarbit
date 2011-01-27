@@ -1,6 +1,8 @@
 #ifndef BENCHMARK_BENCHMARK_H_
 #define BENCHMARK_BENCHMARK_H_
 
+#include <stdint.h>
+#include <stdlib.h>
 #include <sys/mman.h>
 #include <papi.h>
 #include <iostream>
