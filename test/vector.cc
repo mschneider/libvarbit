@@ -4,16 +4,16 @@
 TEST(vector, CreationFailsForLargeBitWidths) {
   EXPECT_EXIT({varbit::vector<uint64_t>(65);},
               ::testing::KilledBySignal(SIGABRT),
-              "Assertion failed: .*");
+              "Assertion .*");
   EXPECT_EXIT({varbit::vector<uint32_t>(33);},
               ::testing::KilledBySignal(SIGABRT),
-              "Assertion failed: .*");
+              "Assertion .*");
   EXPECT_EXIT({varbit::vector<uint16_t>(17);},
               ::testing::KilledBySignal(SIGABRT),
-              "Assertion failed: .*");
+              "Assertion .*");
   EXPECT_EXIT({varbit::vector<uint8_t>(9);},
               ::testing::KilledBySignal(SIGABRT),
-              "Assertion failed: .*");
+              "Assertion .*");
 }
 
 TEST(vector, CreationSucceedsForValidBitWidths) {
