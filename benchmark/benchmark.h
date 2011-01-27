@@ -33,6 +33,7 @@ Configuration Config(int argc = 0, char **argv = NULL) {
 // Sample usage to measure the function int foo(int) with int bar as parameter:
 // Benchmark<int, int> benchmark(&foo);
 // int result = benchmark.run(bar);
+// Make sure to initialize Configuration before!
 template <typename Input, typename Result>
 class Benchmark {
  public:
