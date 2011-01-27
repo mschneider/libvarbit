@@ -37,20 +37,22 @@ template <typename Input, typename Result>
 class Benchmark {
  public:
   Benchmark(Result(*function)(const Input&)) : function_(function) { }
-  Result run(Input input, const char* label = "");
+  Result run(const char* label, const int bit_width, const Input input);
  private:
   Result(*function_)(const Input&);
 };
 
 template<typename Input, typename Result>
-Result Benchmark<Input, Result>::run(Input input, const char* label) {
+Result Benchmark<Input, Result>::run(const char* label, const int bit_width,
+                                                        const Input input) {
   timeval t_start, t_end;
   gettimeofday(&t_start, NULL);
   Result result = function_(input);
   gettimeofday(&t_end, NULL);
-  std::cout << label << ": " << t_end.tv_sec-t_start.tv_sec +
-                                (t_end.tv_usec-t_start.tv_usec)/1000000.0
-                             << std::endl;
+  std::cout << label << ',' << bit_width << ','
+            << t_end.tv_sec-t_start.tv_sec +
+               (t_end.tv_usec-t_start.tv_usec)/1000000.0
+            << std::endl;
   return result;
 }
 #endif  // LIBVARBIT_BENCHMARK_H_

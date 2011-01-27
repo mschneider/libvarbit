@@ -25,7 +25,9 @@ int main(int argc, char** argv) {
     }
     Benchmark<bcv8, bcv8::size_type> benchmark(
         sum_using_subscript<bcv8, bcv8::size_type>);
-    bcv8::size_type result = benchmark.run(vector, "bcv8:sum_using_subscript");
+    bcv8::size_type result = benchmark.run("bcv8:sum_using_subscript",
+                                           bit_width,
+                                           vector);
     std::cout << "Result: " << result << std::endl;
   }
   return 0;
