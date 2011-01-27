@@ -1,11 +1,8 @@
 #ifndef VARBIT_VECTOR_H_
 #define VARBIT_VECTOR_H_
 #include <varbit/reference.h>
-
 #include <stdint.h>
-
 #include <vector>
-#include <cstdlib>
 #include <cassert>
 
 namespace varbit {
