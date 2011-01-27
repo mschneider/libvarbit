@@ -1,11 +1,22 @@
 #include "include/vector.h"
 #include "benchmark/benchmark.h"
 
-template <typename vector_type, typename size_type>
-size_type sum_using_subscript(const vector_type& vector) {
-  size_type result = 0;
-  for (size_type i = 0; i < Config().num_elements(); ++i) {
+template <typename vector_type>
+uint64_t SumUsingSubscript(const vector_type& vector) {
+  uint64_t result = 0;
+  for (typename vector_type::size_type i = 0; i < Config().num_elements();
+       ++i) {
     result += vector[i];
+  }
+  return result;
+};
+
+template <typename vector_type>
+uint64_t SumUsingIterator(const vector_type& vector) {
+  uint64_t result = 0;
+  for (typename vector_type::const_iterator it = vector.begin();
+       it != vector.end(); ++it) {
+    result += *it;
   }
   return result;
 };
@@ -21,30 +32,35 @@ void FillVector(vector_type *vector, const int bit_width) {
 
 template <typename vector_type>
 void SumUsingSTL(const char* vector_name, const int max_bit_width) {
-  Benchmark<vector_type, typename vector_type::size_type> benchmark(
-      sum_using_subscript<vector_type, typename vector_type::size_type>,
+  Benchmark<vector_type, uint64_t> benchmark_subscript(
+      SumUsingSubscript<vector_type>,
       vector_name,
-      "sum_using_subscript");
+      "SumUsingSubscript");
+  Benchmark<vector_type, uint64_t> benchmark_iterator(
+      SumUsingIterator<vector_type>,
+      vector_name,
+      "SumUsingIterator");
   for (int bit_width = 1; bit_width <= max_bit_width; ++bit_width) {
     vector_type vector;
     vector.reserve(Config().num_elements());
     FillVector<vector_type>(&vector, bit_width);
-    typename vector_type::size_type result = benchmark.run(vector, bit_width);
-    std::cout << "Result: " << result << std::endl;
+    uint64_t result_subscript = benchmark_subscript.run(vector, bit_width);
+    uint64_t result_iterator = benchmark_iterator.run(vector, bit_width);
+    assert(result_subscript == result_iterator);
   }
 }
 
 template <typename vector_type>
 void SumUsingVarbit(const char* vector_name) {
-  Benchmark<vector_type, typename vector_type::size_type> benchmark(
-      sum_using_subscript<vector_type, typename vector_type::size_type>,
+  Benchmark<vector_type, uint64_t> benchmark_subscript(
+      SumUsingSubscript<vector_type>,
       vector_name,
-      "sum_using_subscript");
+      "SumUsingSubscript");
   for (typename vector_type::bit_size_type bit_width = 1;
        bit_width <= vector_type::max_bit_width(); ++bit_width) {
     vector_type vector(bit_width, Config().num_elements());
     FillVector<vector_type>(&vector, bit_width);
-    typename vector_type::size_type result = benchmark.run(vector, bit_width);
+    uint64_t result = benchmark_subscript.run(vector, bit_width);
     std::cout << "Result: " << result << std::endl;
   }
 }
