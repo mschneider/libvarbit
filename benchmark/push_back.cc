@@ -1,9 +1,10 @@
 #include "benchmark/benchmark.h"
-#include "include/vector.h"
+#include "varbit/vector.h"
 
 template <typename vector_type>
 uint64_t PushBack(vector_type* vector) {
-  for (typename vector_type::size_type i = 0; i < Config().num_elements(); ++i) {
+  for (typename vector_type::size_type i = 0; i < Config().num_elements();
+       ++i) {
     vector->push_back(i);
   }
   return vector->size();

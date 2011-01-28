@@ -44,8 +44,10 @@ void SumUsingSTL(const char* vector_name, const int max_bit_width) {
     vector_type vector;
     vector.reserve(Config().num_elements());
     FillVector<vector_type>(&vector, bit_width);
-    volatile uint64_t result_subscript = benchmark_subscript.run(vector, bit_width);
-    volatile uint64_t result_iterator = benchmark_iterator.run(vector, bit_width);
+    volatile uint64_t result_subscript = benchmark_subscript.run(vector,
+                                                                 bit_width);
+    volatile uint64_t result_iterator = benchmark_iterator.run(vector,
+                                                               bit_width);
     assert(result_subscript == result_iterator);
   }
 }
