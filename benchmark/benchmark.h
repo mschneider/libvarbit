@@ -1,5 +1,6 @@
-#ifndef LIBVARBIT_BENCHMARK_H_
-#define LIBVARBIT_BENCHMARK_H_
+#ifndef BENCHMARK_BENCHMARK_H_
+#define BENCHMARK_BENCHMARK_H_
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <sys/mman.h>
