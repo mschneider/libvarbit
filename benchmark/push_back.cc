@@ -3,7 +3,7 @@
 
 template <typename vector_type>
 uint64_t PushBack(vector_type* vector) {
-  for(typename vector_type::size_type i = 0; i < Config().num_elements(); ++i) {
+  for (typename vector_type::size_type i = 0; i < Config().num_elements(); ++i) {
     vector->push_back(i);
   }
   return vector->size();
@@ -41,7 +41,8 @@ void PushBackUsingVarbit(const char* vector_name) {
       PushBack<vector_type>,
       vector_name,
       "PushBackUnreserved");
-  for (int bit_width = 1; bit_width <= vector_type::max_bit_width(); ++bit_width) {
+  for (int bit_width = 1; bit_width <= vector_type::max_bit_width();
+       ++bit_width) {
     vector_type reserved_vector(bit_width, Config().num_elements());
     vector_type unreserved_vector(bit_width);
     volatile uint64_t result_reserved = benchmark_reserved.run(&reserved_vector,
