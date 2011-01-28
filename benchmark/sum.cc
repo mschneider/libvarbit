@@ -32,11 +32,11 @@ void FillVector(vector_type *vector, const int bit_width) {
 
 template <typename vector_type>
 void SumUsingSTL(const char* vector_name, const int max_bit_width) {
-  Benchmark<vector_type, uint64_t> benchmark_subscript(
+  Benchmark<const vector_type&, uint64_t> benchmark_subscript(
       SumUsingSubscript<vector_type>,
       vector_name,
       "SumUsingSubscript");
-  Benchmark<vector_type, uint64_t> benchmark_iterator(
+  Benchmark<const vector_type&, uint64_t> benchmark_iterator(
       SumUsingIterator<vector_type>,
       vector_name,
       "SumUsingIterator");
@@ -52,7 +52,7 @@ void SumUsingSTL(const char* vector_name, const int max_bit_width) {
 
 template <typename vector_type>
 void SumUsingVarbit(const char* vector_name) {
-  Benchmark<vector_type, uint64_t> benchmark_subscript(
+  Benchmark<const vector_type&, uint64_t> benchmark_subscript(
       SumUsingSubscript<vector_type>,
       vector_name,
       "SumUsingSubscript");

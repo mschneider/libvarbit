@@ -1,6 +1,7 @@
-#ifndef BENCHMARK_BENCHMARK_H_
-#define BENCHMARK_BENCHMARK_H_
-
+#ifndef LIBVARBIT_BENCHMARK_H_
+#define LIBVARBIT_BENCHMARK_H_
+#include <stdint.h>
+#include <stdlib.h>
 #include <sys/mman.h>
 #include <papi.h>
 #include <iostream>
@@ -50,11 +51,11 @@ Configuration Config(int argc = 0, char **argv = NULL) {
 template <typename Input, typename Result>
 class Benchmark {
  public:
-  Benchmark(Result(*function)(const Input&), const char* function_name,
+  Benchmark(Result(*function)(Input), const char* function_name,
             const char* data_structure_name);
-  Result run(const Input& input, const int bit_width);
+  Result run(Input input, const int bit_width);
  private:
-  Result(*function_)(const Input&);
+  Result(*function_)(Input);
   const char* function_name_;
   const char* data_structure_name_;
   long long *papi_values_;
@@ -65,7 +66,7 @@ template<typename Input, typename Result>
 int Benchmark<Input, Result>::papi_counters_[] = PAPI_COUNTERS;
 
 template<typename Input, typename Result>
-Benchmark<Input, Result>::Benchmark(Result(*function)(const Input&),
+Benchmark<Input, Result>::Benchmark(Result(*function)(Input),
                                     const char* data_structure_name,
                                     const char* function_name)
     : function_(function),
@@ -82,7 +83,7 @@ Benchmark<Input, Result>::Benchmark(Result(*function)(const Input&),
   }
 
 template<typename Input, typename Result>
-Result Benchmark<Input, Result>::run(const Input& input, const int bit_width) {
+Result Benchmark<Input, Result>::run(Input input, const int bit_width) {
   PAPI_read_counters(papi_values_, PAPI_NUM_COUNTERS);
   Result result = function_(input);
   PAPI_read_counters(papi_values_, PAPI_NUM_COUNTERS);
