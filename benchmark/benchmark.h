@@ -1,6 +1,7 @@
 #ifndef LIBVARBIT_BENCHMARK_H_
 #define LIBVARBIT_BENCHMARK_H_
 
+#include <stdint.h>
 #include <sys/mman.h>
 #include <papi.h>
 #include <iostream>
