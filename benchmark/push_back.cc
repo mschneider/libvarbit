@@ -42,7 +42,7 @@ void PushBackUsingVarbit(const char* vector_name) {
       PushBack<vector_type>,
       vector_name,
       "PushBackUnreserved");
-  for (typename vector_type::bit_size_type bit_width = 1;
+  for (typename varbit::bit_size_type bit_width = 1;
        bit_width <= vector_type::max_bit_width();
        ++bit_width) {
     vector_type reserved_vector(bit_width, Config().num_elements());
