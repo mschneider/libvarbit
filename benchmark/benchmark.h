@@ -7,7 +7,9 @@
 #include <papi.h>
 #include <iostream>
 
-#define PAPI_COUNTERS {PAPI_TOT_CYC, PAPI_TOT_INS, PAPI_LST_INS, PAPI_L1_ICA, PAPI_L1_ICH, PAPI_L1_ICM, PAPI_BR_PRC, PAPI_BR_MSP}
+#define PAPI_COUNTERS\
+  {PAPI_TOT_CYC, PAPI_TOT_INS, PAPI_LST_INS, PAPI_L1_ICA, \
+  PAPI_L1_ICH, PAPI_L1_ICM, PAPI_BR_PRC, PAPI_BR_MSP}
 #define PAPI_NUM_COUNTERS 8
 
 // Simple Configuration class handling command lines parameters and benchmark
@@ -29,12 +31,13 @@ Configuration::Configuration(int argc, char **argv) {
   }
   int counters[] = PAPI_COUNTERS;
   const int status = PAPI_start_counters(counters, PAPI_NUM_COUNTERS);
-  if(status != PAPI_OK) {
+  if (status != PAPI_OK) {
     std::cout << "Can't start PAPI Counters (" << status << ")." << std::endl;
     exit(1);
   }
-  if(argc != 2) {
-    std::cout << "Please specify the number of elements as a parameter. Kthxbai." << std::endl;
+  if (argc != 2) {
+    std::cout << "Please specify the number of elements as a parameter."
+              << std::endl;
     exit(1);
   }
   num_elements_ = atoi(argv[1]) * 1024 * 1024;
@@ -59,7 +62,7 @@ class Benchmark {
   Result(*function_)(Input);
   const char* function_name_;
   const char* data_structure_name_;
-  long long *papi_values_;
+  int64 *papi_values_;
   static int papi_counters_[];
 };
 
@@ -73,9 +76,9 @@ Benchmark<Input, Result>::Benchmark(Result(*function)(Input),
     : function_(function),
       function_name_(function_name),
       data_structure_name_(data_structure_name),
-      papi_values_(new long long[PAPI_NUM_COUNTERS]) {
+      papi_values_(new int64[PAPI_NUM_COUNTERS]) {
     std::cout << "#function, data structure, bit width";
-    for(unsigned int i = 0; i < PAPI_NUM_COUNTERS; ++i) {
+    for (unsigned int i = 0; i < PAPI_NUM_COUNTERS; ++i) {
       char event_name[PAPI_MAX_STR_LEN] = "";
       PAPI_event_code_to_name(papi_counters_[i], event_name);
       std::cout << ", " << event_name;
@@ -88,18 +91,18 @@ Result Benchmark<Input, Result>::run(Input input, const int bit_width) {
   PAPI_read_counters(papi_values_, PAPI_NUM_COUNTERS);
   Result result = function_(input);
   PAPI_read_counters(papi_values_, PAPI_NUM_COUNTERS);
-  
+
   std::cout << function_name_
             << ", "
             << data_structure_name_
             << ", "
             << bit_width
             << ", ";
-  for(unsigned int i = 0; i < PAPI_NUM_COUNTERS; ++i) {
+  for (unsigned int i = 0; i < PAPI_NUM_COUNTERS; ++i) {
     std::cout << papi_values_[i] << (i < PAPI_NUM_COUNTERS - 1 ? ", " : "");
   }
   std::cout << std::endl;
-            
+
   return result;
 }
 #endif  // BENCHMARK_BENCHMARK_H_
