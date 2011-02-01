@@ -45,6 +45,7 @@ void SumUsingVarbit(const std::vector<varbit::bit_size_type>& bit_sizes,
        bit_sizes.begin(); 
        bit_width != bit_sizes.end();
        ++bit_width) {
+    if(*bit_width > vector_type::max_bit_width()) continue;
     vector_type vector(*bit_width, Config().num_elements());
     FillVector<vector_type>(&vector, *bit_width);
     uint64_t result_subscript = benchmark_subscript.run(vector, *bit_width);

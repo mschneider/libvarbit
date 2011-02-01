@@ -76,7 +76,7 @@ Benchmark<Input, Result>::Benchmark(Result(*function)(Input),
     : function_(function),
       function_name_(function_name),
       data_structure_name_(data_structure_name) {
-    std::cout << "#function,data structure,bit width";
+    std::cout << "#function,data_structure,bit_width";
     for (int i = 0; i < num_papi_counters; ++i) {
       char event_name[PAPI_MAX_STR_LEN];
       PAPI_event_code_to_name(papi_counters[i], event_name);
