@@ -12,12 +12,12 @@ template <typename T>
 class vector {
  public:
   // capabale of addressing all elements
-  typedef uint64_t                   size_type;
-  typedef T                          block_type;
-  typedef block_type                 value_type;
-  typedef std::vector<block_type>    vector_type;
-  typedef reference<block_type>      value_reference_type;
-  typedef const_iterator<block_type> const_iterator;
+  typedef uint64_t                           size_type;
+  typedef T                                  block_type;
+  typedef block_type                         value_type;
+  typedef std::vector<block_type>            vector_type;
+  typedef reference<block_type>              value_reference_type;
+  typedef varbit::const_iterator<block_type> const_iterator;
 
   vector(bit_size_type segment_width, size_type capacity = 0)
       : segment_width_(segment_width),

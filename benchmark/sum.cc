@@ -62,7 +62,7 @@ void SumUsingVarbit(const char* vector_name) {
       SumUsingIterator<vector_type>,
       vector_name,
       "SumUsingIterator");
-  for (typename vector_type::bit_size_type bit_width = 1;
+  for (typename varbit::bit_size_type bit_width = 1;
        bit_width <= vector_type::max_bit_width(); ++bit_width) {
     vector_type vector(bit_width, Config().num_elements());
     FillVector<vector_type>(&vector, bit_width);

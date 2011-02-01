@@ -10,9 +10,9 @@
 #ifndef PAPI_COUNTERS
 #define PAPI_COUNTERS {PAPI_TOT_CYC, PAPI_TOT_INS}
 #endif  // PAPI_COUNTERS
-#ifndef NUM_PAPI_COUNTERS 
-#define NUM_PAPI_COUNTERS 2 
-#endif  // NUM_PAPI_COUNTERS 
+#ifndef NUM_PAPI_COUNTERS
+#define NUM_PAPI_COUNTERS 2
+#endif  // NUM_PAPI_COUNTERS
 const int num_papi_counters = NUM_PAPI_COUNTERS;
 // Must not be const, because PAPI's interface is weird.
 int papi_counters[NUM_PAPI_COUNTERS] = PAPI_COUNTERS;
