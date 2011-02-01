@@ -58,8 +58,8 @@ class vector {
                                    offset_in_block);
   };
 
-  const size_type capacity() const { return capacity_; }
-  const size_type size() const { return size_; }
+  size_type capacity() const { return capacity_; }
+  size_type size() const { return size_; }
   static bit_size_type max_bit_width() { return sizeof(block_type) * 8; }
 
  private:
@@ -71,7 +71,7 @@ class vector {
     return blocks_[n / segments_per_block_];
   }
   // returns the offset of the segment containing the nth element
-  const bit_size_type OffsetInBlock(const size_type n) const {
+  bit_size_type OffsetInBlock(const size_type n) const {
     return (n % segments_per_block_) * segment_width_;
   }
 

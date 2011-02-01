@@ -2,7 +2,7 @@ project(libvarbit)
 cmake_minimum_required (VERSION 2.8)
 
 # settings
-set(CMAKE_CXX_FLAGS "-O3")#" -Wall -Wextra -Wformat=2 -Wold-style-cast -Winit-self -Wmissing-include-dirs -Wpointer-arith -Wredundant-decls -Wundef -Wwrite-strings")
+set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -Wformat=2 -Wold-style-cast -Winit-self -Wmissing-include-dirs -Wpointer-arith -Wredundant-decls -Wundef -Wwrite-strings")
 
 # headers
 install(DIRECTORY varbit DESTINATION include)
@@ -21,11 +21,13 @@ include(CheckIncludeFileCXX)
 check_include_file_cxx(papi.h PFUNC_HAVE_PAPI_H)
 if(PFUNC_HAVE_PAPI_H)
 	aux_source_directory(benchmark benchmark_sources)
+	# Usually benchmarks don't care for their results.
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-variable")
 	foreach(source_filename ${benchmark_sources})
 		string(REGEX REPLACE "benchmark/(.*).cc" "\\1"
 			binary_filename ${source_filename})
 		add_executable("benchmark_${binary_filename}" ${source_filename})
-		target_link_libraries("benchmark_${binary_filename}" "papi")
+		target_link_libraries("benchmark_${binary_filename}" papi)
 	endforeach()
 else()
 	message("-- Benchmarks disabled")
