@@ -42,10 +42,10 @@ void SumUsingVarbit(const std::vector<varbit::bit_size_type>& bit_sizes,
       vector_name,
       "SumUsingIterator");
   for (std::vector<varbit::bit_size_type>::const_iterator bit_width =
-       bit_sizes.begin(); 
+       bit_sizes.begin();
        bit_width != bit_sizes.end();
        ++bit_width) {
-    if(*bit_width > vector_type::max_bit_width()) continue;
+    if (*bit_width > vector_type::max_bit_width()) continue;
     vector_type vector(*bit_width, Config().num_elements());
     FillVector<vector_type>(&vector, *bit_width);
     uint64_t result_subscript = benchmark_subscript.run(vector, *bit_width);
@@ -66,9 +66,10 @@ void SumUsingSTL(const std::vector<varbit::bit_size_type>& bit_sizes,
       vector_name,
       "SumUsingIterator");
   for (std::vector<varbit::bit_size_type>::const_iterator bit_width =
-       bit_sizes.begin(); 
+       bit_sizes.begin();
        bit_width != bit_sizes.end();
        ++bit_width) {
+    if (*bit_width > sizeof(typename vector_type::value_type) * 8) continue;
     vector_type vector;
     vector.reserve(Config().num_elements());
     FillVector<vector_type>(&vector, *bit_width);
