@@ -8,6 +8,9 @@ TEST(reference, UsesImplicitConversion) {
   varbit::reference<uint16_t> reference3(&block, 0xF00, 8);
   varbit::reference<uint16_t> reference4(&block, 0xF000, 12);
   EXPECT_EQ(static_cast<uint8_t>(0xE), reference1);
+  EXPECT_EQ(static_cast<uint16_t>(0xE), reference1);
+  EXPECT_EQ(static_cast<uint32_t>(0xE), reference1);
+  EXPECT_EQ(static_cast<uint64_t>(0xE), reference1);
   EXPECT_EQ(0x000E, reference1);
   EXPECT_EQ(0x000F, reference2);
   EXPECT_EQ(0x0001, reference3);
