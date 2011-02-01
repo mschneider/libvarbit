@@ -7,10 +7,8 @@
 #include <papi.h>
 #include <iostream>
 
-#define PAPI_COUNTERS\
-  {PAPI_TOT_CYC, PAPI_TOT_INS, PAPI_LST_INS, PAPI_L1_ICA, \
-  PAPI_L1_ICH, PAPI_L1_ICM, PAPI_BR_PRC, PAPI_BR_MSP}
-#define PAPI_NUM_COUNTERS 8
+#define PAPI_COUNTERS {PAPI_TOT_CYC, PAPI_TOT_INS}
+#define PAPI_NUM_COUNTERS 2
 
 // Simple Configuration class handling command lines parameters and benchmark
 // global setup. Aways create an instance of this in your main:

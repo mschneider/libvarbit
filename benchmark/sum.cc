@@ -58,11 +58,19 @@ void SumUsingVarbit(const char* vector_name) {
       SumUsingSubscript<vector_type>,
       vector_name,
       "SumUsingSubscript");
+  Benchmark<const vector_type&, uint64_t> benchmark_iterator(
+      SumUsingIterator<vector_type>,
+      vector_name,
+      "SumUsingIterator");
   for (typename vector_type::bit_size_type bit_width = 1;
        bit_width <= vector_type::max_bit_width(); ++bit_width) {
     vector_type vector(bit_width, Config().num_elements());
     FillVector<vector_type>(&vector, bit_width);
-    volatile uint64_t result = benchmark_subscript.run(vector, bit_width);
+    volatile uint64_t result_subscript = benchmark_subscript.run(vector,
+                                                                 bit_width);
+    volatile uint64_t result_iterator = benchmark_iterator.run(vector,
+                                                               bit_width);
+    assert(result_subscript == result_iterator);
   }
 }
 
