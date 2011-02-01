@@ -1,6 +1,8 @@
 #ifndef VARBIT_VECTOR_H_
 #define VARBIT_VECTOR_H_
+#include <varbit/types.h>
 #include <varbit/reference.h>
+#include <varbit/iterator.h>
 #include <assert.h>
 #include <stdint.h>
 #include <vector>
@@ -10,16 +12,12 @@ template <typename T>
 class vector {
  public:
   // capabale of addressing all elements
-  typedef uint64_t                        size_type;
-  typedef T                               block_type;
-  typedef std::vector<block_type>         vector_type;
-  // capabale of addressing all blocks
-  typedef typename vector_type::size_type block_size_type;
-  typedef unsigned int                    bit_size_type;
-  // capabale of addressing all segments in a block
-  typedef bit_size_type                   segment_count_type;
-  // sizeof(value_type) should be <= sizeof(block_type)
-  typedef block_type                      value_type;
+  typedef uint64_t                   size_type;
+  typedef T                          block_type;
+  typedef block_type                 value_type;
+  typedef std::vector<block_type>    vector_type;
+  typedef reference<block_type>      value_reference_type;
+  typedef const_iterator<block_type> const_iterator;
 
   vector(bit_size_type segment_width, size_type capacity = 0)
       : segment_width_(segment_width),
@@ -46,33 +44,53 @@ class vector {
   }
 
   value_type operator[](const size_type n) const {
-      const block_type &block = Block(n);
-      const bit_size_type offset_in_block = OffsetInBlock(n);
-      return ((block >> offset_in_block) & bitmask_);
-  };
+    const block_type &block = Block(n);
+    const bit_size_type offset_in_block = OffsetInBlock(n);
+    return ((block >> offset_in_block) & bitmask_);
+  }
 
-  reference<block_type> operator[](const size_type n) {
-      block_type &block = Block(n);
-      const bit_size_type offset_in_block = OffsetInBlock(n);
-      return reference<block_type>(&block, bitmask_ << offset_in_block,
-                                   offset_in_block);
-  };
+  value_reference_type operator[](const size_type n) {
+    block_type &block = Block(n);
+    const bit_size_type offset_in_block = OffsetInBlock(n);
+    return value_reference_type(&block, bitmask_ << offset_in_block,
+                                offset_in_block);
+  }
+
+  const_iterator begin() const {
+    return const_iterator(&blocks_[0], bitmask_, segment_width_,
+                                                 segments_per_block_);
+  }
+
+  const_iterator end() const {
+    return const_iterator(
+        &blocks_[BlockIndex(size())],
+        bitmask_ << OffsetInBlock(size()),
+        segment_width_,
+        segments_per_block_,
+        SegmentIndex(size()));
+  }
 
   size_type capacity() const { return capacity_; }
   size_type size() const { return size_; }
   static bit_size_type max_bit_width() { return sizeof(block_type) * 8; }
 
  private:
+  typename vector_type::size_type BlockIndex(const size_type n) const {
+    return n / segments_per_block_;
+  }
+  segment_count_type SegmentIndex(const size_type n) const {
+    return n % segments_per_block_;
+  }
   // returns the block containing the nth element
   block_type& Block(const size_type n) {
-    return blocks_[n / segments_per_block_];
+    return blocks_[BlockIndex(n)];
   }  // double definition for const access
   const block_type& Block(const size_type n) const {
-    return blocks_[n / segments_per_block_];
+    return blocks_[BlockIndex(n)];
   }
   // returns the offset of the segment containing the nth element
   bit_size_type OffsetInBlock(const size_type n) const {
-    return (n % segments_per_block_) * segment_width_;
+    return SegmentIndex(n) * segment_width_;
   }
 
   const bit_size_type      segment_width_;
