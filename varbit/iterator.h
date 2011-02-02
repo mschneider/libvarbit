@@ -33,6 +33,12 @@ class const_iterator {
     return *this;
   }
 
+  const_iterator_type& operator++(int) {
+     const_iterator_type temp = *this;
+     ++(*this);
+     return temp;
+  }
+
   value_type operator*() const {
     return block_copy_ & bitmask_;
   }
@@ -40,6 +46,10 @@ class const_iterator {
   bool operator!=(const const_iterator_type& other) {
     return block_pointer_ != other.block_pointer_ ||
            segment_index_ != other.segment_index_;
+  }
+
+  bool operator==(const const_iterator_type& other) {
+    return !((*this) != other);
   }
 
  private:
