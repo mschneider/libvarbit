@@ -24,6 +24,18 @@ void FillVector(vector_type *vector, const int bit_width) {
   }
 }
 
+uint64_t RandomGenerator(void*) {
+  uint64_t result = 0;
+  for (uint64_t i = 0; i < Config().num_elements();
+       ++i) {
+    unsigned int res[4];
+    rand_sse(res);
+    uint64_t pos = (uint64_t)*res;
+    result += pos;
+  }
+  return result;
+};
+
 template <typename vector_type>
 void RandomUsingVarbit(const std::vector<varbit::bit_size_type>& bit_sizes,
          const char* vector_name) {
@@ -61,6 +73,14 @@ void RandomUsingSTL(const std::vector<varbit::bit_size_type>& bit_sizes,
   }
 }
 
+void CostOfRandom() {
+  Benchmark<void*, uint64_t> benchmark_random(
+      RandomGenerator,
+      "*",
+      "RandomGenerator");
+  volatile uint64_t result = benchmark_random.run(NULL, NULL);
+}
+
 int main(int argc, char** argv) {
   Configuration config = Config(argc, argv);
   std::vector<varbit::bit_size_type> bit_sizes;
@@ -72,6 +92,8 @@ int main(int argc, char** argv) {
   bit_sizes.push_back(32);
   bit_sizes.push_back(64);
   srand_sse(static_cast<unsigned int>(time(0)));
+
+  CostOfRandom();
 
   RandomUsingVarbit<varbit::vector<uint8_t> >(bit_sizes, "varbit8");
   RandomUsingVarbit<varbit::vector<uint16_t> >(bit_sizes, "varbit16");
