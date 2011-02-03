@@ -24,7 +24,7 @@ void FillVector(vector_type *vector, const int bit_width) {
   }
 }
 
-uint64_t RandomGenerator(void*) {
+uint64_t RandomGenerator(void*) { //NOLINT: unused
   uint64_t result = 0;
   for (uint64_t i = 0; i < Config().num_elements();
        ++i) {

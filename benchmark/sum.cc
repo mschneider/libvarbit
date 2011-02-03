@@ -21,6 +21,8 @@ uint64_t SumUsingIterator(const vector_type& vector) {
   return result;
 };
 
+// Fill needs to maks bits correctly, so that the sum of all elements
+// is always the same - independent of the used data-structure.
 template <typename vector_type>
 void FillVector(vector_type *vector, const int bit_width) {
   const uint64_t bitmask = ~(~0 << bit_width);

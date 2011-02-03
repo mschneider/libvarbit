@@ -33,9 +33,9 @@ class const_iterator {
     return *this;
   }
 
-  const_iterator_type& operator++(int) {
+  const_iterator_type operator++(int) { //NOLINT: unused
      const_iterator_type temp = *this;
-     ++(*this);
+     this->operator++();
      return temp;
   }
 
@@ -49,7 +49,7 @@ class const_iterator {
   }
 
   bool operator==(const const_iterator_type& other) {
-    return !((*this) != other);
+    return !this->operator!=(other);
   }
 
  private:
