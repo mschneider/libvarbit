@@ -60,5 +60,5 @@ class const_iterator {
   const segment_count_type segments_per_block_;
   segment_count_type segment_index_;
 };
-};
+}
 #endif  // VARBIT_ITERATOR_H_

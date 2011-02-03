@@ -26,5 +26,5 @@ class reference {
   const block_type bitmask_;
   const int offset_in_block_;
 };
-};
+}
 #endif  // VARBIT_REFERENCE_H_

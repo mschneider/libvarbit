@@ -100,5 +100,5 @@ class vector {
   size_type                size_;
   vector_type              blocks_;
 };
-};
+}
 #endif  // VARBIT_VECTOR_H_
