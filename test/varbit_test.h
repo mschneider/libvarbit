@@ -3,7 +3,6 @@
 #include <gtest/gtest.h>
 #include "varbit/vector.h"
 
-namespace varbit {
 const int kSignificantBits = 7;
 const int kNumElements = 24;
 const uint64_t kElements[kNumElements] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
@@ -19,6 +18,5 @@ class TestWithVector : public testing::Test {
     }
   }
   varbit::vector<uint64_t> vector; //NOLINT: we don't use std::vector
-};
 };
 #endif  // TEST_VARBIT_TEST_H_
