@@ -2,6 +2,16 @@
 
 class ConstIterator : public TestWithVector { };
 
+TEST_F(ConstIterator, Comparable) {
+  EXPECT_TRUE(vector.begin() == vector.begin());
+  EXPECT_TRUE(vector.end() == vector.end());
+  EXPECT_TRUE(vector.begin() != vector.end());
+  
+  EXPECT_FALSE(vector.begin() != vector.begin());
+  EXPECT_FALSE(vector.end() != vector.end());
+  EXPECT_FALSE(vector.begin() == vector.end());
+}
+
 TEST_F(ConstIterator, CorrectNumberOfElements) {
   int i = 0;
   varbit::vector<uint64_t>::const_iterator it = vector.begin();
@@ -36,7 +46,7 @@ TEST_F(ConstIterator, SameValuesAsConstSubscript) {
 TEST_F(ConstIterator, SameValuesAsSubscriptUsingPostIncrement) {
   int i = 0;
   varbit::vector<uint64_t>::const_iterator it = vector.begin();
-  while (!(it == vector.end())) {
+  while (it != vector.end()) {
     EXPECT_EQ(vector[i++], *it++);
   }
 }
@@ -45,7 +55,7 @@ TEST_F(ConstIterator, SameValuesAsConstSubscriptUsingPostIncrement) {
   const varbit::vector<uint64_t>& const_vector = vector;
   int i = 0;
   varbit::vector<uint64_t>::const_iterator it = const_vector.begin();
-  while (!(it == const_vector.end())) {
+  while (it != const_vector.end()) {
     EXPECT_EQ(const_vector[i++], *it++);
   }
 }
