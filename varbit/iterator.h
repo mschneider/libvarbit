@@ -71,7 +71,7 @@ class iterator : public const_iterator<T> {
   typedef block_type                 value_type;
   typedef const_iterator<block_type> parent_type;
   typedef reference<block_type>      reference;
-  
+
   iterator(
       block_type* block_pointer,
       const block_type& bitmask,

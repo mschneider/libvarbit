@@ -70,7 +70,7 @@ class vector {
         segments_per_block_,
         SegmentIndex(size()));
   }
-  
+
   iterator begin() {
     return iterator(&blocks_[0], bitmask_, segment_width_, segments_per_block_);
   }
@@ -107,9 +107,9 @@ class vector {
     return SegmentIndex(n) * segment_width_;
   }
 
-  const bit_size_type      segment_width_;
-  const segment_count_type segments_per_block_;
-  const block_type         bitmask_;
+  bit_size_type            segment_width_;
+  segment_count_type       segments_per_block_;
+  block_type               bitmask_;
   size_type                capacity_;
   size_type                size_;
   vector_type              blocks_;
