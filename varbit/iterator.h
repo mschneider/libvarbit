@@ -46,12 +46,12 @@ class const_iterator {
     return block_copy_ & bitmask_;
   }
 
-  bool operator!=(const const_iterator_type& other) {
+  bool operator!=(const const_iterator_type& other) const {
     return block_pointer_ != other.block_pointer_ ||
            segment_index_ != other.segment_index_;
   }
 
-  bool operator==(const const_iterator_type& other) {
+  bool operator==(const const_iterator_type& other) const {
     return !this->operator!=(other);
   }
 
@@ -70,9 +70,10 @@ class iterator : public const_iterator<T> {
   typedef T                          block_type;
   typedef block_type                 value_type;
   typedef const_iterator<block_type> parent_type;
+  typedef reference<block_type>      reference;
   
   iterator(
-      const block_type* block_pointer,
+      block_type* block_pointer,
       const block_type& bitmask,
       const bit_size_type& segment_width,
       const segment_count_type& segments_per_block,
@@ -83,8 +84,8 @@ class iterator : public const_iterator<T> {
   value_type operator*() {
     const bit_size_type offset_in_block = this->segment_index_ *
         this->segment_width_;
-    return reference<T>(this->block_pointer_, this->bitmask_ << offset_in_block,
-        offset_in_block);
+    return reference(const_cast<block_type*>(this->block_pointer_),
+        this->bitmask_ << offset_in_block, offset_in_block);
   }
 };
 };
