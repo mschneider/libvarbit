@@ -1,5 +1,6 @@
 #ifndef VARBIT_TYPES_H_
 #define VARBIT_TYPES_H_
+
 namespace varbit {
 typedef unsigned int bit_size_type;
 // capabale of addressing all segments in a block

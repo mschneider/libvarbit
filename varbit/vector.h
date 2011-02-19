@@ -18,6 +18,7 @@ class vector {
   typedef std::vector<block_type>            vector_type;
   typedef reference<block_type>              value_reference_type;
   typedef varbit::const_iterator<block_type> const_iterator;
+  typedef varbit::iterator<block_type>       iterator;
 
   vector(bit_size_type segment_width, size_type capacity = 0)
       : segment_width_(segment_width),
@@ -63,6 +64,19 @@ class vector {
 
   const_iterator end() const {
     return const_iterator(
+        &blocks_[BlockIndex(size())],
+        bitmask_ << OffsetInBlock(size()),
+        segment_width_,
+        segments_per_block_,
+        SegmentIndex(size()));
+  }
+  
+  iterator begin() {
+    return iterator(&blocks_[0], bitmask_, segment_width_, segments_per_block_);
+  }
+
+  iterator end() {
+    return iterator(
         &blocks_[BlockIndex(size())],
         bitmask_ << OffsetInBlock(size()),
         segment_width_,

@@ -1,5 +1,8 @@
 #ifndef VARBIT_ITERATOR_H_
 #define VARBIT_ITERATOR_H_
+#include <varbit/types.h>
+#include <varbit/reference.h>
+
 namespace varbit {
 template <typename T>
 class const_iterator {
@@ -52,7 +55,7 @@ class const_iterator {
     return !this->operator!=(other);
   }
 
- private:
+ protected:
   block_type block_copy_;
   const block_type* block_pointer_;
   const block_type bitmask_;
@@ -60,5 +63,29 @@ class const_iterator {
   const segment_count_type segments_per_block_;
   segment_count_type segment_index_;
 };
-}
+
+template <typename T>
+class iterator : public const_iterator<T> {
+ public:
+  typedef T                          block_type;
+  typedef block_type                 value_type;
+  typedef const_iterator<block_type> parent_type;
+  
+  iterator(
+      const block_type* block_pointer,
+      const block_type& bitmask,
+      const bit_size_type& segment_width,
+      const segment_count_type& segments_per_block,
+      const segment_count_type segment_index = 0)
+      : parent_type(block_pointer, bitmask, segment_width, segments_per_block,
+            segment_index) { }
+
+  value_type operator*() {
+    const bit_size_type offset_in_block = this->segment_index_ *
+        this->segment_width_;
+    return reference<T>(this->block_pointer_, this->bitmask_ << offset_in_block,
+        offset_in_block);
+  }
+};
+};
 #endif  // VARBIT_ITERATOR_H_
