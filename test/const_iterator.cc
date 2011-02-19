@@ -1,13 +1,8 @@
-#include <gtest/gtest.h>
-#include "varbit/vector.h"
+#include "test/varbit_test.h"
 
-TEST(const_iterator, returnsTheSameValuesAsSubscript) {
-  uint64_t values[24] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 128, 129,
-                         127, 126, 98, 45, -1, -2, -233, -98, -52};
-  varbit::vector<uint64_t> vector(7);
-  for (int i = 0; i < 24; ++i) {
-    vector.push_back(values[i]);
-  }
+class ConstIterator : public varbit::TestWithVector { };
+
+TEST_F(ConstIterator, returnsTheSameValuesAsSubscript) {
   int i = 0;
   varbit::vector<uint64_t>::const_iterator it = vector.begin();
   while (it != vector.end()) {
@@ -18,13 +13,7 @@ TEST(const_iterator, returnsTheSameValuesAsSubscript) {
   EXPECT_EQ(24, i);
 }
 
-TEST(const_iterator, returnsTheSameValuesAsConstSubscript) {
-  uint64_t values[24] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 128, 129,
-                         127, 126, 98, 45, -1, -2, -233, -98, -52};
-  varbit::vector<uint64_t> vector(7);
-  for (int i = 0; i < 24; ++i) {
-    vector.push_back(values[i]);
-  }
+TEST_F(ConstIterator, returnsTheSameValuesAsConstSubscript) {
   const varbit::vector<uint64_t>& const_vector = vector;
   int i = 0;
   varbit::vector<uint64_t>::const_iterator it = const_vector.begin();
@@ -36,13 +25,7 @@ TEST(const_iterator, returnsTheSameValuesAsConstSubscript) {
   EXPECT_EQ(24, i);
 }
 
-TEST(const_iterator, returnsTheSameValuesAsSubscriptUsingPostIncrement) {
-  uint64_t values[24] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 128, 129,
-                         127, 126, 98, 45, -1, -2, -233, -98, -52};
-  varbit::vector<uint64_t> vector(7);
-  for (int i = 0; i < 24; ++i) {
-    vector.push_back(values[i]);
-  }
+TEST_F(ConstIterator, returnsTheSameValuesAsSubscriptUsingPostIncrement) {
   int i = 0;
   varbit::vector<uint64_t>::const_iterator it = vector.begin();
   while (!(it == vector.end())) {
@@ -51,13 +34,7 @@ TEST(const_iterator, returnsTheSameValuesAsSubscriptUsingPostIncrement) {
   EXPECT_EQ(24, i);
 }
 
-TEST(const_iterator, returnsTheSameValuesAsConstSubscriptUsingPostIncrement) {
-  uint64_t values[24] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 128, 129,
-                         127, 126, 98, 45, -1, -2, -233, -98, -52};
-  varbit::vector<uint64_t> vector(7);
-  for (int i = 0; i < 24; ++i) {
-    vector.push_back(values[i]);
-  }
+TEST_F(ConstIterator, returnsTheSameValuesAsConstSubscriptUsingPostIncrement) {
   const varbit::vector<uint64_t>& const_vector = vector;
   int i = 0;
   varbit::vector<uint64_t>::const_iterator it = const_vector.begin();

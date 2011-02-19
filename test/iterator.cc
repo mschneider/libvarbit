@@ -1,13 +1,8 @@
-#include <gtest/gtest.h>
-#include "varbit/vector.h"
+#include "test/varbit_test.h"
 
-TEST(iterator, returnsTheSameValuesAsSubscript) {
-  uint64_t values[24] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 128, 129,
-                         127, 126, 98, 45, -1, -2, -233, -98, -52};
-  varbit::vector<uint64_t> vector(7);
-  for (int i = 0; i < 24; ++i) {
-    vector.push_back(values[i]);
-  }
+class Iterator : public varbit::TestWithVector { };
+
+TEST_F(Iterator, returnsTheSameValuesAsSubscript) {
   int i = 0;
   varbit::vector<uint64_t>::iterator it = vector.begin();
   while (it != vector.end()) {
@@ -18,13 +13,7 @@ TEST(iterator, returnsTheSameValuesAsSubscript) {
   EXPECT_EQ(24, i);
 }
 
-TEST(iterator, returnsTheSameValuesAsSubscriptUsingPostIncrement) {
-  uint64_t values[24] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 128, 129,
-                         127, 126, 98, 45, -1, -2, -233, -98, -52};
-  varbit::vector<uint64_t> vector(7);
-  for (int i = 0; i < 24; ++i) {
-    vector.push_back(values[i]);
-  }
+TEST_F(Iterator, returnsTheSameValuesAsSubscriptUsingPostIncrement) {
   int i = 0;
   varbit::vector<uint64_t>::iterator it = vector.begin();
   while (!(it == vector.end())) {
