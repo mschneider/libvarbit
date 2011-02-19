@@ -30,3 +30,14 @@ TEST_F(Iterator, SameValuesAsSubscriptUsingPostIncrement) {
   }
 }
 
+TEST_F(Iterator, IsWritable) {
+  int i = 0;
+  varbit::vector<uint64_t>::iterator it = vector.begin();
+  while (!(it == vector.end())) {
+    const uint64_t newValue = kElements[kNumElements-i];
+    *it = newValue;
+    EXPECT_EQ(newValue, *it);
+    ++it;
+    ++i;
+  }
+}

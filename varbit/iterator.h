@@ -81,7 +81,7 @@ class iterator : public const_iterator<T> {
       : parent_type(block_pointer, bitmask, segment_width, segments_per_block,
             segment_index) { }
 
-  value_type operator*() {
+  reference operator*() {
     const bit_size_type offset_in_block = this->segment_index_ *
         this->segment_width_;
     return reference(const_cast<block_type*>(this->block_pointer_),
