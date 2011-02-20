@@ -1,7 +1,7 @@
 # libvarbit
 Data structures storing data with variable bit length.
 Please note that libvarbit does no automatic sign extension for signed values,
-you have to it yourself: e.g using Sean Anderson's excellent
+you have to do it yourself: e.g using Sean Anderson's excellent
 [Bit Twiddling Hacks](http://graphics.stanford.edu/~seander/bithacks.html#FixedSignExtend).
 
 ## Dependencies
@@ -36,7 +36,7 @@ Follow the "Build" instructions and execute `./tests` afterwards. Please make
 sure to run the tests before submitting your changes. Our code follows the 
 [Google C++ Style Guide](http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml)
 with the exception of using the iostreams library. We encourage usage of the
-lint tool (shortcut is: `make style`).
+lint tool (execute: `make style`).
 
 ## Benchmarks
 We implemented 3 synthetic benchmarks measuring sequential read, random read and
