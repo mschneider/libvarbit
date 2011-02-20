@@ -121,3 +121,9 @@ TEST(vector, UpdatesValues) {
     EXPECT_EQ(const_vector[i], new_values[i]);
   }
 }
+
+TEST(vector, CorrectlyReturnsNegativeValues) {
+  varbit::vector<uint8_t> vector(7);
+  vector.push_back(-1);
+  EXPECT_EQ(-1, vector[0]);
+}

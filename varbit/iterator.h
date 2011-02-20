@@ -42,7 +42,7 @@ class iterator : public base_iterator<T> {
   }
 
   reference_type operator*() {
-    return reference_type(block_pointer_, this->bitmask_ << OffsetInBlock(),
+    return reference_type(block_pointer_, bitmask_ << OffsetInBlock(),
         OffsetInBlock());
   }
 

@@ -34,7 +34,7 @@ TEST_F(Iterator, UpdatesItselfOnWrite) {
   int i = 0;
   varbit::vector<uint64_t>::iterator it = vector.begin();
   while (it != vector.end()) {
-    const int64_t newValue = kElements[kNumElements-i];
+    const int64_t newValue = kElements[kNumElements-1-i];
     *it = newValue;
     EXPECT_EQ(newValue, *it);
     ++it;
