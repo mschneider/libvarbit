@@ -2,6 +2,7 @@
 #define VARBIT_VECTOR_H_
 #include <varbit/types.h>
 #include <varbit/reference.h>
+#include <varbit/const_iterator.h>
 #include <varbit/iterator.h>
 #include <assert.h>
 #include <stdint.h>
