@@ -86,8 +86,8 @@ TEST(vector, CapacityIsAlwaysGreaterOrEqualThanSize) {
 }
 
 TEST(vector, OnlyLeastSignificantBitsAreStored) {
-  uint64_t values[24] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8,
-                         127, 126, 125, 124, 123, 122};
+  int64_t values[24] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0, -1, -2, 30, -31, 32, -33,
+          63, -64, 129, 128, 127, 126, 125, 124};
   varbit::vector<uint64_t> vector(2);
   for (int i = 0; i < 24; ++i) {
     vector.push_back(values[i]);
@@ -120,10 +120,4 @@ TEST(vector, UpdatesValues) {
   for (int i = 0; i < 24; ++i) {
     EXPECT_EQ(const_vector[i], new_values[i]);
   }
-}
-
-TEST(vector, CorrectlyReturnsNegativeValues) {
-  varbit::vector<uint8_t> vector(7);
-  vector.push_back(-1);
-  EXPECT_EQ(-1, vector[0]);
 }
