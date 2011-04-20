@@ -4,18 +4,9 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <sys/mman.h>
-#include <papi.h>
 #include <iostream>
 
-#ifndef PAPI_COUNTERS
-#define PAPI_COUNTERS {PAPI_TOT_CYC, PAPI_TOT_INS}
-#endif  // PAPI_COUNTERS
-#ifndef NUM_PAPI_COUNTERS
-#define NUM_PAPI_COUNTERS 2
-#endif  // NUM_PAPI_COUNTERS
-const int num_papi_counters = NUM_PAPI_COUNTERS;
-// Must not be const, because PAPI's interface is weird.
-int papi_counters[NUM_PAPI_COUNTERS] = PAPI_COUNTERS;
+#include "benchmark/timer.h"
 
 // Simple Configuration class handling command lines parameters and benchmark
 // global setup. Aways create an instance of this in your main:
@@ -32,11 +23,6 @@ class Configuration {
 Configuration::Configuration(int argc, char **argv) {
   if (!mlockall(MCL_CURRENT & MCL_FUTURE)) {
     std::cerr << "mlockall failed: Couldn't lock memory." << std::endl;
-    exit(1);
-  }
-  const int status = PAPI_start_counters(papi_counters, num_papi_counters);
-  if (status != PAPI_OK) {
-    std::cout << "Can't start PAPI Counters (" << status << ")." << std::endl;
     exit(1);
   }
   if (argc != 2) {
@@ -66,7 +52,7 @@ class Benchmark {
   Result(*function_)(Input);
   const char *function_name_;
   const char *data_structure_name_;
-  long long int papi_values_[num_papi_counters]; // NOLINT PAPI interface again
+  Timer timer_;
 };
 
 template<typename Input, typename Result>
@@ -75,26 +61,21 @@ Benchmark<Input, Result>::Benchmark(Result(*function)(Input),
                                     const char *function_name)
     : function_(function),
       function_name_(function_name),
-      data_structure_name_(data_structure_name) {
+      data_structure_name_(data_structure_name),
+      timer_() {
     std::cout << "#function,data_structure,bit_width";
-    for (int i = 0; i < num_papi_counters; ++i) {
-      char event_name[PAPI_MAX_STR_LEN];
-      PAPI_event_code_to_name(papi_counters[i], event_name);
-      std::cout << ',' << event_name;
-    }
+    timer_.PrintHeader();
     std::cout << std::endl;
   }
 
 template<typename Input, typename Result>
 Result Benchmark<Input, Result>::run(Input input, const int bit_width) {
-  PAPI_read_counters(papi_values_, num_papi_counters);
+  timer_.Start();
   Result result = function_(input);
-  PAPI_read_counters(papi_values_, num_papi_counters);
+  timer_.Stop();
   std::cout << function_name_ << ',' << data_structure_name_ << ','
             << bit_width;
-  for (int i = 0; i < num_papi_counters; ++i) {
-    std::cout << ',' << papi_values_[i];
-  }
+  timer_.PrintMeasurements();
   std::cout << std::endl;
   return result;
 }

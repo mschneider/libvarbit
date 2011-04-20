@@ -21,15 +21,16 @@ class const_iterator : public base_iterator<T> {
       const segment_count_type segment_index = 0)
       : parent_type(const_cast<block_type*>(block_pointer), bitmask,
             segment_width, segments_per_block, segment_index),
-        block_copy_(*block_pointer) { }
+        block_copy_initialised_(false) { }
 
   const_iterator_type& operator++() {
     ++segment_index_;
     if (segment_index_ == segments_per_block_) {
       segment_index_ = 0;
       ++block_pointer_;
-      block_copy_ = *block_pointer_;
+      block_copy_initialised_ = false;
     } else {
+      EnsureBlockCopy();
       block_copy_ = block_copy_ >> segment_width_;
     }
     return *this;
@@ -42,13 +43,22 @@ class const_iterator : public base_iterator<T> {
   }
 
   value_type operator*() const {
+    EnsureBlockCopy();
     return block_copy_ & bitmask_;
   }
 
  protected:
+  void EnsureBlockCopy() const {
+    if (!block_copy_initialised_) {
+      block_copy_ = *block_pointer_;
+      block_copy_initialised_ = true;
+    }
+  }
+
   using parent_type::OffsetInBlock;
 
-  block_type block_copy_;
+  mutable block_type block_copy_;
+  mutable bool block_copy_initialised_;
   using parent_type::block_pointer_;
   using parent_type::bitmask_;
   using parent_type::segment_width_;

@@ -32,3 +32,10 @@ TEST_F(ConstIterator, SameValuesAsConstSubscriptUsingPostIncrement) {
     EXPECT_EQ(const_vector[i++], *it++);
   }
 }
+
+TEST_F(ConstIterator, EndPointerIsNeverDereferenced) {
+  const varbit::vector<uint64_t> const_vector(64);
+  for (varbit::vector<uint64_t>::const_iterator it = const_vector.begin();
+      it != const_vector.end(); ++it) { }
+}
+

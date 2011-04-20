@@ -5,10 +5,6 @@ you have to do it yourself: e.g using Sean Anderson's excellent
 [Bit Twiddling Hacks](http://graphics.stanford.edu/~seander/bithacks.html#FixedSignExtend).
 
 ## Dependencies
-[CMake](http://www.cmake.org) (2.8)
-[FAQ](http://www.cmake.org/Wiki/CMake_FAQ)
-[DOC](http://www.cmake.org/cmake/help/cmake-2-8-docs.html)
-
 [googletest](http://code.google.com/p/googletest) (1.5)
 [FAQ](http://code.google.com/p/googletest/wiki/FAQ)
 [DOC1](http://code.google.com/p/googletest/wiki/Primer)
@@ -16,28 +12,18 @@ you have to do it yourself: e.g using Sean Anderson's excellent
 
 [PAPI](http://icl.cs.utk.edu/papi/) (4.1) (only needed for our benchmarks)
 
-## Build
-To build the benchmarks and tests simply execute:
-
-	mkdir build
-	cd build
-	cmake ..
-	make
-
-To change the compilation flags edit
-[CMakeLists.txt](https://github.com/mschneider/libvarbit/blob/master/CMakeLists.txt).
-Afterwards execute `make rebuild_cache` and `make`.
-	
 ## Installation
-Follow the "Build" instructions and execute `make install`.
+To install the library execute `make install`.
 
 ## Tests
-Follow the "Build" instructions and execute `./tests` afterwards. Please make
-sure to run the tests before submitting your changes. Our code follows the 
+To run the tests execute `make check`.
+Please make sure to run the tests before submitting changes.
+Our code follows the
 [Google C++ Style Guide](http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml)
-with the exception of using the iostreams library. We encourage usage of the
-lint tool (execute: `make style`).
+with the exception of using the iostreams library.
+We encourage usage of the lint tool (execute: `make style`).
 
 ## Benchmarks
-We implemented 3 synthetic benchmarks measuring sequential read, random read and
-insertion against a plain `std::vector`.
+We implemented 3 synthetic benchmarks measuring sequential read, random read
+and insertion against a plain `std::vector`.
+To build the benchmarks execute `make`. To run those execute `make benchmark`.
