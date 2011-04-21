@@ -6,6 +6,7 @@ BENCHMARK_OBJS = $(patsubst benchmark/%.cc,build/%.o,$(BENCHMARK_SOURCES))
 BENCHMARK_BINARIES = $(patsubst benchmark/%.cc,build/benchmark_%,$(BENCHMARK_SOURCES))
 ifneq ($(shell locate papi_version),)
 	BENCHMARK_CXXFLAGS = -DUSE_PAPI
+	BENCHMARK_LDFLAGS = -lpapi
 endif
 PREFIX=/usr/local
 
@@ -41,16 +42,14 @@ benchmark: $(BENCHMARK_BINARIES)
 	build/benchmark_random 100 >results/random.100
 	build/benchmark_push_back 100 >results/push_back.100
 build/benchmark_%: build/%.o
-	$(CXX) $(CXXFLAGS) $(BENCHMARK_CXXFLAGS) -o $@ $<
-
-check: build/test
-	build/test
-build/test: $(TEST_OBJS)
-	$(CXX) $(CXXFLAGS) -lgtest -lgtest_main -o $@ $^
-
+	$(CXX) $(CXXFLAGS) $(BENCHMARK_LDFLAGS) -o $@ $<
 $(BENCHMARK_OBJS): build/.created
 	$(CXX) $(CXXFLAGS) $(BENCHMARK_CXXFLAGS) -c -o $@ $(patsubst build/%.o,benchmark/%.cc,$@)
 
+check: build/test
+	build/test 2>/dev/null # hide warning
+build/test: $(TEST_OBJS)
+	$(CXX) $(CXXFLAGS) -lpthread -lgtest -lgtest_main -o $@ $^
 $(TEST_OBJS): build/.created
 	$(CXX) $(CXXFLAGS) -c -o $@ $(patsubst build/%.o,test/%.cc,$@)
 

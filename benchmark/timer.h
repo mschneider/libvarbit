@@ -6,7 +6,7 @@
 
 const int num_papi_counters = 2;
 // Must not be const, because PAPI's interface is weird.
-int papi_counters[NUM_PAPI_COUNTERS] = {PAPI_TOT_CYC, PAPI_TOT_INS};
+int papi_counters[num_papi_counters] = {PAPI_TOT_CYC, PAPI_TOT_INS};
 
 class Timer {
   long long int papi_values_[num_papi_counters]; // NOLINT PAPI interface again
@@ -21,8 +21,8 @@ class Timer {
   }
 
   void PrintHeader() const {
+    char event_name[PAPI_MAX_STR_LEN];
     for (int i = 0; i < num_papi_counters; ++i) {
-      char event_name[PAPI_MAX_STR_LEN];
       PAPI_event_code_to_name(papi_counters[i], event_name);
       std::cout << ',' << event_name;
     }
