@@ -9,14 +9,14 @@
 #include <vector>
 
 namespace varbit {
-template <typename T>
+    template <typename T, typename Allocator = std::allocator<T> >
 class vector {
  public:
-  // capabale of addressing all elements
+  // capable of addressing all elements
   typedef uint64_t                           size_type;
   typedef T                                  block_type;
   typedef block_type                         value_type;
-  typedef std::vector<block_type>            vector_type;
+  typedef std::vector<block_type, Allocator> vector_type;
   typedef reference<block_type>              value_reference_type;
   typedef varbit::const_iterator<block_type> const_iterator;
   typedef varbit::iterator<block_type>       iterator;
