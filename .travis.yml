@@ -1,4 +1,4 @@
-install: "apt-get install libgtest-dev"
+install: "sudo apt-get install libgtest-dev"
 script: "make check"
 
 branches:
