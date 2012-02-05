@@ -3,5 +3,5 @@ script: "make all check"
 
 branches:
   only:
-    - trunk
+    - master
 
