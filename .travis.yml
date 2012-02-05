@@ -1,5 +1,5 @@
 # no installation...
-script: "make all check"
+script: "make check"
 
 branches:
   only:
