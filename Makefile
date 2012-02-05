@@ -26,7 +26,7 @@ build/.created:
 
 build/dependencies: build/.created $(TEST_SOURCES) $(BENCHMARK_SOURCES)
 	$(CXX) $(CXXFLAGS) -MM $(TEST_SOURCES) >build/test.d
-	$(CXX) $(CXXFLAGS) $(BENCHMARK_CXXFLAGS) -MM $(BENCHMARK_SOURCES) >build/benchmark.d
+	-$(CXX) $(CXXFLAGS) $(BENCHMARK_CXXFLAGS) -MM $(BENCHMARK_SOURCES) >build/benchmark.d
 	cat build/*.d | sed 's|.*\.o|build/&|g' >build/dependencies
 include build/dependencies
 
