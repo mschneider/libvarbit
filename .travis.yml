@@ -1,4 +1,4 @@
-# no installation...
+install: "apt-get install libgtest-dev"
 script: "make check"
 
 branches:
