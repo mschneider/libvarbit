@@ -6,6 +6,7 @@
 #include <varbit/iterator.h>
 #include <assert.h>
 #include <stdint.h>
+#include <memory>
 #include <vector>
 
 namespace varbit {

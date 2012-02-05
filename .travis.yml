@@ -1,5 +1,5 @@
 install: "sudo apt-get install libgtest-dev"
-script: "make check"
+script: "make check style"
 
 branches:
   only:
